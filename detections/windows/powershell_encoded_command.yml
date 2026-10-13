@@ -1,0 +1,35 @@
+
+title: PowerShell Encoded Command
+id: 8d7a1c43-6cf2-46d7-89b1-33c34d1e6412
+status: experimental
+description: Detects PowerShell processes using encoded command arguments.
+author: DaC Lab
+date: 2026-10-12
+
+logsource:
+  category: process_creation
+  product: windows
+
+detection:
+  selection:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+    CommandLine|contains:
+      - '-EncodedCommand'
+      - '-enc '
+  condition: selection
+
+fields:
+  - Image
+  - CommandLine
+  - User
+
+falsepositives:
+  - Legitimate administrative scripts using encoded commands
+
+level: medium
+
+tags:
+  - attack.execution
+  - attack.t1059.001
